@@ -5,7 +5,7 @@ class GameScene extends Phaser.Scene {
 		this.firstClick = null;
 		this.score = 100;
 		this.correct = 0;
-    }
+    }	
 
     preload (){	
 		this.load.image('back', '../resources/back.png');
@@ -18,22 +18,47 @@ class GameScene extends Phaser.Scene {
 	}
 	
     create (){	
-		let arraycards = ['co', 'sb', 'co', 'sb'];
-		this.cameras.main.setBackgroundColor(0xBFFCFF);
-		
-		this.add.image(250, 300, arraycards[0]);
-		this.add.image(350, 300, arraycards[1]);
-		this.add.image(450, 300, arraycards[2]);
-		this.add.image(550, 300, arraycards[3]);
-		
+		console.log("entra a create")
+		let totescartes = ['co', 'co', 'cb', 'cb', 'sb', 'sb', 'so', 'so', 'tb', 'tb', 'to', 'to'];
+		this.cameras.main.setBackgroundColor(0xC3D6B0);
+		var json = localStorage.getItem("config") || '{"cards":2,"dificulty":"hard"}';
+		var options_data = JSON.parse(json);
+		var cuantosPares = options_data.cards;
+		var dificultat = options_data.dificulty;
+		var arraycards = totescartes.slice(0, cuantosPares * 2)
+		var espaciadoX = cuantosPares/2 * 96;
+		var espaciadoY = cuantosPares/2 * 128;
+		if (cuantosPares > 5){
+			var files = 3
+			var columnes = 4
+		}
+		else{ 
+			var files = 2
+		  	var columnes = cuantosPares
+		}
+
+		var quin = 0;
+
+		arraycards.sort((a, b) => 0.5 - Math.random());
+
+		for (let iterador = 0; iterador < columnes; iterador++){
+			for (let j = 0; j < files; j++){
+
+				this.add.image(iterador*125 + this.cameras.main.centerX - espaciadoX, j*150 + this.cameras.main.centerY - espaciadoY/2, arraycards[quin]);
+				quin += 1;	
+			}
+		}
+
 		this.cards = this.physics.add.staticGroup();
-		
-		this.cards.create(250, 300, 'back');
-		this.cards.create(350, 300, 'back');
-		this.cards.create(450, 300, 'back');
-		this.cards.create(550, 300, 'back');
-		
+
+		for (let iterador1 = 0; iterador1 < columnes; iterador1++){
+			for (let j = 0; j < files; j++){
+				this.cards.create(iterador1*125 + this.cameras.main.centerX - espaciadoX, j*150 + this.cameras.main.centerY - espaciadoY/2, 'back');
+			}
+		}
+
 		let i = 0;
+
 		this.cards.children.iterate((card)=>{
 			card.card_id = arraycards[i];
 			i++;
@@ -44,7 +69,36 @@ class GameScene extends Phaser.Scene {
 					if (this.firstClick.card_id !== card.card_id){
 						this.score -= 20;
 						this.firstClick.enableBody(false, 0, 0, true, true);
+
 						card.enableBody(false, 0, 0, true, true);
+
+						/*this.cards.children.each(function(card) {
+   							card.disableBody(true,true);
+						}, this);*/
+					
+						/*var tempsFora = null;			
+						if (dificultat == "hard"){
+							tempsFora = 1000;
+						}
+						else if (dificultat == "normal"){
+							tempsFora = 2000;
+						}
+						else {
+							tempsFora = 3000;
+						}*/
+						
+						/*setTimeout(function() {
+							this.firstClick.enableBody(false,true);
+							card.disableBody(true,true);
+						},tempsFora);
+						*/
+						/*this.cards.children.each(function(card) {
+								let espai1 = 0, espai2 = 0;
+								card.enableBody(false, espai1*125 + this.cameras.main.centerX - espaciadoX, espai2*150 + this.cameras.main.centerY, true, true);
+								espai1++;
+								espai2++;
+						}, this);*/
+						
 						if (this.score <= 0){
 							alert("Game Over");
 							loadpage("../");
@@ -52,7 +106,7 @@ class GameScene extends Phaser.Scene {
 					}
 					else{
 						this.correct++;
-						if (this.correct >= 2){
+						if (this.correct >= cuantosPares){
 							alert("You Win with " + this.score + " points.");
 							loadpage("../");
 						}
@@ -60,12 +114,13 @@ class GameScene extends Phaser.Scene {
 					this.firstClick = null;
 				}
 				else{
+					console.log(card);
 					this.firstClick = card;
 				}
 			}, card);
 		});
 	}
 	
-	update (){	}
+//	update (){	}
 }
 
