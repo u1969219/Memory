@@ -23,18 +23,18 @@ class GameScene extends Phaser.Scene {
 		this.cameras.main.setBackgroundColor(0xC3D6B0);
 		var json = localStorage.getItem("config") || '{"cards":2,"dificulty":"hard"}';
 		var options_data = JSON.parse(json);
-		var cuantosPares = options_data.cards;
+		var parells = options_data.cards;
 		var dificultat = options_data.dificulty;
-		var arraycards = totescartes.slice(0, cuantosPares * 2)
-		var espaciadoX = cuantosPares/2 * 96;
-		var espaciadoY = cuantosPares/2 * 128;
-		if (cuantosPares > 5){
+		var arraycards = totescartes.slice(0, parells * 2)
+		var espaix = parells/2 * 96;
+		var espaiy = parells/2 * 128;
+		if (parells > 5){
 			var files = 3
 			var columnes = 4
 		}
 		else{ 
 			var files = 2
-		  	var columnes = cuantosPares
+		  	var columnes = parells
 		}
 
 		var quin = 0;
@@ -44,7 +44,7 @@ class GameScene extends Phaser.Scene {
 		for (let iterador = 0; iterador < columnes; iterador++){
 			for (let j = 0; j < files; j++){
 
-				this.add.image(iterador*125 + this.cameras.main.centerX - espaciadoX, j*150 + this.cameras.main.centerY - espaciadoY/2, arraycards[quin]);
+				this.add.image(iterador*125 + this.cameras.main.centerX - espaix, j*150 + this.cameras.main.centerY - espaiy/2, arraycards[quin]);
 				quin += 1;	
 			}
 		}
@@ -53,7 +53,7 @@ class GameScene extends Phaser.Scene {
 
 		for (let iterador1 = 0; iterador1 < columnes; iterador1++){
 			for (let j = 0; j < files; j++){
-				this.cards.create(iterador1*125 + this.cameras.main.centerX - espaciadoX, j*150 + this.cameras.main.centerY - espaciadoY/2, 'back');
+				this.cards.create(iterador1*125 + this.cameras.main.centerX - espaix, j*150 + this.cameras.main.centerY - espaiy/2, 'back');
 			}
 		}
 
@@ -94,7 +94,7 @@ class GameScene extends Phaser.Scene {
 						*/
 						/*this.cards.children.each(function(card) {
 								let espai1 = 0, espai2 = 0;
-								card.enableBody(false, espai1*125 + this.cameras.main.centerX - espaciadoX, espai2*150 + this.cameras.main.centerY, true, true);
+								card.enableBody(false, espai1*125 + this.cameras.main.centerX - espaix, espai2*150 + this.cameras.main.centerY, true, true);
 								espai1++;
 								espai2++;
 						}, this);*/
@@ -106,7 +106,7 @@ class GameScene extends Phaser.Scene {
 					}
 					else{
 						this.correct++;
-						if (this.correct >= cuantosPares){
+						if (this.correct >= parells){
 							alert("You Win with " + this.score + " points.");
 							loadpage("../");
 						}
