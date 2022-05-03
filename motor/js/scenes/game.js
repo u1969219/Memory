@@ -107,7 +107,7 @@ class GameScene extends Phaser.Scene {
 					else{
 						this.correct++;
 						if (this.correct >= parells){
-							alert("You Win with " + this.score + " points.");
+							alert("Has Guanyat Amb " + this.score + " punts.");
 							loadpage("../");
 						}
 					}
